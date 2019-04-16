@@ -1,0 +1,341 @@
+Docker execution help
+======================
+Open Terminal in your respective system 
+==> Log into Quest machine with below credentials
+    ssh dockuser2@192.168.5.37
+    Password: @Quest!234%
+==> After above step you would be logged into Quest server with Username :  dockuser2
+    (You can verify by...typing the command "whoami")
+    <cmd prompt>$ whoami
+      dockuser2
+==> fire the command  "docker ps"  (To find out all the docker containers running)
+   <cmd prompt>$ docker ps
+CONTAINER ID        IMAGE                     COMMAND             CREATED             STATUS              PORTS                NAMES
+b79acb53b3a5        bharatsau/bharat_gpu:v6   "/bin/bash"         2 weeks ago         Up 2 weeks                               dreamy_heisenberg
+8776fac74dd9        bharatsau/bharat_gpu:v6   "/bin/bash"         2 weeks ago         Up 2 weeks                               festive_jang
+ae68a1fd13d6        bharatsau/bharat_gpu:v6   "/bin/bash"         2 weeks ago         Up 2 weeks                               upbeat_rosalind
+0622a7d0fe86        58a8e83b7dbf              "/bin/bash"         2 weeks ago         Up 13 days          6006/tcp, 8888/tcp   loving_shaw
+60a9cee88cb6        a0a3a19f7d20              "/bin/bash"         7 weeks ago         Up 5 weeks                               smit_container
+da410b014585        b30796aab908              "/bin/bash"         2 months ago        Up 2 months         80/tcp               animesh_cuda 
+    
+     
+ 
+Image name ==> 58a8e83b7dbf
+container name ==> 0622a7d0fe86
+
+
+start the container using command "docker start 0622a7d0fe86" (Only once you need to do & tat too if no container present..if its present just use it with exec command....how you do it..find which container present using "docker ps"..choose the latest container present in it) 
+and then do  ==> docker start 0622a7d0fe86 ==>docker exec -it 0622a7d0fe86 /bin/bash 
+==> and check if its up and running with docker ps -a|grep -i 0622a7d0fe86
+==> now if its present you can login into the Docker-->container(with the image)
+==> by giving this command 
+==> nvidia-docker run -v /users/dockuser2/imageclassifier:/testdir -v /mnt/exilant:/testmountdir -i -t 58a8e83b7dbf /bin/bash ( This command has mounted the previous (space issue_Quest folder)  to newly alloted space
+
+Docker execution help
+======================
+Image name ==> 58a8e83b7dbf
+container name ==> 0622a7d0fe86
+start the container using command "docker start 0622a7d0fe86" (Only once you need to do & tat too if no container present..if its present just use it with exec command....how you do it..find which container present using "docker ps"..choose the latest container present in it) 
+and then do  ==> docker start 0622a7d0fe86 ==>docker exec -it 0622a7d0fe86 /bin/bash 
+==> and check if its up and running with docker ps -a|grep -i 0622a7d0fe86
+==> now if its present you can login into the Docker-->container(with the image)
+==> by giving this command 
+==> nvidia-docker run -v /users/dockuser2/imageclassifier:/testdir -v /mnt/exilant:/testmountdir -i -t 58a8e83b7dbf /bin/bash ( This command has mounted the previous (space issue_Quest folder)  to newly alloted space
+
+
+
+Commands used
+=============
+docker stats
+docker top 0622a7d0fe86
+docker image history 0622a7d0fe86
+docker image ls
+nvidia-docker ps
+docker start 0622a7d0fe86
+docker stop 0622a7d0fe86
+docker exec -it 0622a7d0fe86 /bin/bash 
+docker ps -a|grep -i 0622a7d0fe86
+nvidia-docker run -v /users/dockuser2/imageclassifier:/testdir -v /mnt/exilant:/testmountdir -i -t 58a8e83b7dbf /bin/bash (used for mounting 2 locations through soft link)
+nvidia-smi
+os.environ["CUDA_VISIBLE_DEVICES"]="3,4,5"
+
+
+mv  /mnt/exilant/data_new  /mnt/exilant/image/
+export CUDA_DEVICE_ORDER="PCI_BUS_ID"
+export CUDA_VISIBLE_DEVICES="3,4,5"
+
+docker exec -it 0622a7d0fe86 /bin/bash 
+
+
+nohup python n_image_CNN.py  > 1520_NO_BatchNormilazion.logs &
+
+
+#!/bin/ksh
+echo "Trying cuda variables"
+echo $CUDA_VISIBLE_DEVICES
+nohup python n_image_CNN.py  > 3937_3_epochs.logs
+
+
+
+find . -size  0 -print0|xargs -0 rm -rf
+chmod 444 * ==> take out write
+for EM-QRCI & Others
+====================
+chmod 644 * ==> put write back
+ 
+ 
+#!/bin/sh
+echo "TRAIN DATA FOLDER STARTED"
+files=`cat /Users/raghuram.b/Desktop/train_filelist.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i DISO`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/train/DISO/
+fi
+done
+done
+
+echo "DISO ENDED"
+files=`cat /Users/raghuram.b/Desktop/train_filelist.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i DLAY`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/train/DLAY/
+fi
+done
+done
+
+echo "DLAY ENDED"
+files=`cat /Users/raghuram.b/Desktop/train_filelist.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i DPID`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/train/DPID/
+fi
+done
+done
+
+echo "DPID ENDED"
+files=`cat /Users/raghuram.b/Desktop/train_filelist.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i DSHP`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/train/DSHP/
+fi
+done
+done
+
+echo "DSHP ENDED"
+	      
+files=`cat /Users/raghuram.b/Desktop/train_filelist.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i OTHERS`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/train/OTHERS/
+fi
+done
+done
+
+files=`cat /Users/raghuram.b/Desktop/train_filelist.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i RCRI`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/train/RCRI/
+fi
+done
+done
+
+files=`cat /Users/raghuram.b/Desktop/train_filelist.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i RTQM`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/train/RTQM/
+fi
+done
+done
+
+files=`cat /Users/raghuram.b/Desktop/train_filelist.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i RZZZ`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/train/RZZZ/
+fi
+done
+done
+
+files=`cat /Users/raghuram.b/Desktop/train_filelist.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i XXER`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/train/XXER/
+fi
+done
+done
+
+#Validation folder starts
+
+echo "TRAIN DATA FOLDER ENDED"
+
+files=`cat /Users/raghuram.b/Desktop/validation_list.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i DISO`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/validation/DISO/
+fi
+done
+done
+
+echo "DISO ENDED"
+files=`cat /Users/raghuram.b/Desktop/validation_list.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i DLAY`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/validation/DLAY/
+fi
+done
+done
+
+echo "DLAY ENDED"
+files=`cat /Users/raghuram.b/Desktop/validation_list.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i DPID`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/validation/DPID/
+fi
+done
+done
+
+echo "DPID ENDED"
+files=`cat /Users/raghuram.b/Desktop/validation_list.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i DSHP`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/validation/DSHP/
+fi
+done
+done
+
+
+	      
+echo "DSHP ENDED"
+files=`cat /Users/raghuram.b/Desktop/validation_list.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i OTHERS`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/validation/OTHERS/
+fi
+done
+done
+
+echo "OTHERS ENDED"
+files=`cat /Users/raghuram.b/Desktop/validation_list.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i RCRI`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/validation/RCRI/
+fi
+done
+done
+
+echo "RCRI ENDED"
+files=`cat /Users/raghuram.b/Desktop/validation_list.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i RTQM`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/validation/RTQM/
+fi
+done
+done
+echo "RTQM ENDED"
+files=`cat /Users/raghuram.b/Desktop/validation_list.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i RZZZ`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/validation/RZZZ/
+fi
+done
+done
+
+echo "RZZZ ENDED"
+files=`cat /Users/raghuram.b/Desktop/validation_list.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i XXER`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/validation/XXER/
+fi
+done
+done
+echo "XXER ENDED"
+echo "PROGRAM ENDED" 

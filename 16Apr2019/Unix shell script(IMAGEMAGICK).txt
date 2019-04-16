@@ -1,0 +1,303 @@
+
+
+crop width(image width) x height(no effect(keep it as width only) + width(always zero) + height(up to down...normal understanding of height its starts cropping)
+
+
+****** Converting first page pdf only to jpeg and resscaling it to a4 size *******
+cd /Users/raghuram.b/Desktop/Exxon/IntelligentText/TextClassification_Crop_Only_Firstpage/single_page_A4Size_jpegs
+
+files=`find . -type f -iname '*pdf'`
+for i in $files;
+do
+echo $i
+name=`basename -s '.pdf' $i`
+echo $name
+echo 'converting 1 page pdf to 1 page jpg image'
+convert -quality 100 -resize 2480x3508 $i $name".jpg"
+done
+
+
+****** SEARCH FOR TEXT AND IMAGE FILES and do header n footer seperately******
+
+TEXT (header)
+=====
+cd /Users/raghuram.b/Desktop/Exxon/IntelligentText/Diagrams
+
+files=`find . -type f -iname '*pdf'`
+for i in $files;
+do
+echo $i
+name=`basename -s '.pdf' $i`
+echo $name
+echo 'cropping started for file'
+convert -quality 100 -resize 1000x1000 $i $name"_temp.jpg"
+convert $name"_temp.jpg"  -crop 1000x250+0+0 $name".jpg"
+rm -rf $name"_temp.jpg"
+done
+
+
+Diagrams (Footer need to check coordinates yet)
+========
+cd /Users/raghuram.b/Desktop/Exxon/IntelligentText/writtendocuments
+
+files=`find . -type f -iname '*pdf'`
+for i in $files;
+do
+echo $i
+name=`basename -s '.pdf' $i`
+echo $name
+echo 'cropping started for file'
+convert -quality 100 -resize 1000x1000 $i $name"_temp.jpg"
+convert $name"_temp.jpg"  -crop 1000x1000+0+700 $name".jpg"
+rm -rf $name"_temp.jpg"
+done
+
+
+
+###################################
+
+####Unix script to segregate Diagrams + Written documents
+
+cd /Users/raghuram.b/Desktop/Exxon/IntelligentText/single_page_pdfs
+files =`find .|grep -iE 'DSHP|DLAY|DISO|DPID'`
+for i in $files;
+do
+mv $i /Users/raghuram.b/Desktop/Exxon/IntelligentText/Diagrams/
+done
+
+####Unix script to rename faulty filenames (PDF to .txt)
+
+files=`find .|grep -i 'PDF'`
+for i in $files
+do
+basename=`echo $i|cut -d '.' -f 2`
+ext='.txt'
+filename=`echo $basename$ext`
+echo $filename
+mv $i /Users/raghuram.b/Desktop/Exxon/IntelligentText/TXT_of_Cropped$filename
+done
+
+
+
+
+
+
+
+Rough tryouts
+###############
+
+
+##################Shell Script copy 30% test data
+import sys
+import os.path
+path=sys.argv[1]
+print(path)
+
+python Validation_Model_5.py '/Users/raghuram.b/Desktop/Exxon/Exilant_ExxonMobil(For etv office prepared)/Fresh_Text_Files/'
+
+python [Cmd_Line]Validation_Model_5.py '/Users/raghuram.b/Desktop/Exxon/Exilant_ExxonMobil(For etv office prepared)/Fresh_Text_Files/'
+
+files=`find '/Users/raghuram.b/Desktop/Quest_txts'`
+###############
+
+
+
+mv `find . |grep -i 'EM-QRCRI'` '/Users/raghuram.b/Desktop/data/train/EM-QRCRI'
+mv `find . |grep -i 'ZZ-QRCRI'` '/Users/raghuram.b/Desktop/data/train/ZZ-QRCRI/'
+mv `find . |grep -i 'ZZ-VDLAY'` '/Users/raghuram.b/Desktop/data/train/ZZ-VDLAY/'
+mv `find . |grep -i 'ZZ-VDSHP'` '/Users/raghuram.b/Desktop/data/train/ZZ-VDSHP/'
+mv `find . |grep -i 'ZZ-VDZZZ'` '/Users/raghuram.b/Desktop/data/train/ZZ-VDZZZ/'
+mv `find . |grep -i 'ZZ-VRZZZ'` '/Users/raghuram.b/Desktop/data/train/ZZ-VRZZZ/'
+
+mv  * '/Users/raghuram.b/Desktop/data/train/Others/'
+
+cd /Users/raghuram.b/Desktop/Quest_txts
+files=`ls -1`
+for txt in $files
+do
+tail -2 /Users/raghuram.b/Desktop/Quest_txts/$txt >> /Users/raghuram.b/Desktop/Exxon/Self_OCR/Txts/$txt
+done
+
+
+
+cd /Users/raghuram.b/Desktop/Quest_txts
+files=`ls -1`
+for txt in $files
+do
+tail -2 /Users/raghuram.b/Desktop/Quest_txts/$txt >> /Users/raghuram.b/Desktop/exilant_ocr/$txt
+done
+
+
+cd /Users/raghuram.b/Desktop/Exxon/self_ocr_crop/crop_texts\(Text_Not_Clear\)
+files=`ls -1`
+for txt in $files
+do
+tail -2 /Users/raghuram.b/Desktop/Exxon/Exilant_ExxonMobil\(For\ etv\ office\ prepared\)/TXTs/$txt >> /Users/raghuram.b/Desktop/Exxon/self_ocr_crop/crop_texts\(Text_Not_Clear\)_2_lines_added/$txt
+done
+	
+	
+find .|grep -i XXER|cut -d '-' -f 2,3|sort|uniq -c
+
+CHECK WHAT NUMBER TO GIVE FOR HEAD 
+REPLACE PATTERN NAME
+
+
+find .|grep -i XXER|cut -d '-' -f 2,3|sort|uniq > /Users/raghuram.b/Desktop/temp
+for i in `cat /Users/raghuram.b/Desktop/temp`
+do
+touch file2
+`cat /Users/raghuram.b/Desktop/file2 > /Users/raghuram.b/Desktop/file1`
+ls|grep -i $i | head -12 >> /Users/raghuram.b/Desktop/file1
+for i in `cat /Users/raghuram.b/Desktop/file1`
+do
+mv $i /Users/raghuram.b/Desktop/data_new/validation/XXER/ 
+done
+done
+
+
+find /Users/raghuram.b/Desktop/data_new/validation/XXER/|grep -i XXER|cut -d '-' -f 2,3|sort|uniq -c
+
+
+
+OTHERS
+######
+find .|cut -d '-' -f 2,3|sort|uniq > /Users/raghuram.b/Desktop/temp
+for i in `cat /Users/raghuram.b/Desktop/temp`
+do
+touch file2
+`cat /Users/raghuram.b/Desktop/file2 > /Users/raghuram.b/Desktop/file1`
+ls|grep -i $i | head -1 >> /Users/raghuram.b/Desktop/file1
+for i in `cat /Users/raghuram.b/Desktop/file1`
+do
+mv $i /Users/raghuram.b/Desktop/data_new/validation/OTHERS/ 
+done
+done
+
+
+find ./ -type f |cut -d '/' -f 3|cut -d '-' -f 2|sort|cut -c2-|sort|uniq -c
+
+find /Users/raghuram.b/Desktop/data_new/train/RTQM|grep -i RTQM|cut -d '-' -f 2,3|sort|uniq -c
+
+
+mv `find . |grep -i 'EM-QRCRI'` '/Users/raghuram.b/Desktop/data/train/EM-QRCRI'
+mv `find . |grep -i 'ZZ-QRCRI'` '/Users/raghuram.b/Desktop/data/train/ZZ-QRCRI/'
+mv `find . |grep -i 'ZZ-VDLAY'` '/Users/raghuram.b/Desktop/data/train/ZZ-VDLAY/'
+mv `find . |grep -i 'ZZ-VDSHP'` '/Users/raghuram.b/Desktop/data/train/ZZ-VDSHP/'
+mv `find . |grep -i 'ZZ-VDZZZ'` '/Users/raghuram.b/Desktop/data/train/ZZ-VDZZZ/'
+mv `find . |grep -i 'ZZ-VRZZZ'` '/Users/raghuram.b/Desktop/data/train/ZZ-VRZZZ/'
+
+mv  * '/Users/raghuram.b/Desktop/data/train/Others/'
+
+find .|cut -d '-' -f 2,3|sort|uniq > /Users/raghuram.b/Desktop/temp
+
+scp dockuser2@192.168.5.37:/mnt/exilant/correct_distributed_image/data_new/validation/OTHERS/validation_others.txt /Users/raghuram.b/Desktop/
+
+
+IMAGE DATA PREPARATION OF MAKING FIRST_PAGE to A4 size and later will be sent to docker
+---------------------------------------------------------------------------------------
+============
+Train data (do for all 9 categories)
+============
+DISO DLAY  DPID  DSHP	OTHERS	RCRI  RTQM  RZZZ  XXER     	
+
+files=`cat /Users/raghuram.b/Desktop/train_filelist.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i DISO`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/train/DISO/
+fi
+done
+done
+
+files=`cat /Users/raghuram.b/Desktop/validation_others.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE/`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/validation/OTHERS
+fi
+done
+done
+
+scp -r /Users/raghuram.b/Desktop/data/ dockuser2@192.168.5.37:/mnt/exilant/crop_firstpage/
+
+=========
+validation data (do for all 9 categories)
+=========
+DISO DLAY  DPID  DSHP	OTHERS	RCRI  RTQM  RZZZ  XXER  
+
+files=`cat /Users/raghuram.b/Desktop/validation_list.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i DISO`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/validation/DISO/
+fi
+done
+done
+
+mv `find . |grep -i 'EM-QRCRI'` '/Users/raghuram.b/Desktop/data/train/EM-QRCRI'
+mv `find . |grep -i 'ZZ-QRCRI'` '/Users/raghuram.b/Desktop/data/train/ZZ-QRCRI/'
+mv `find . |grep -i 'ZZ-VDLAY'` '/Users/raghuram.b/Desktop/data/train/ZZ-VDLAY/'
+mv `find . |grep -i 'ZZ-VDSHP'` '/Users/raghuram.b/Desktop/data/train/ZZ-VDSHP/'
+mv `find . |grep -i 'ZZ-VDZZZ'` '/Users/raghuram.b/Desktop/data/train/ZZ-VDZZZ/'
+mv `find . |grep -i 'ZZ-VRZZZ'` '/Users/raghuram.b/Desktop/data/train/ZZ-VRZZZ/'
+
+mv  * '/Users/raghuram.b/Desktop/data/train/Others/'
+
+find .|cut -d '-' -f 2,3|sort|uniq > /Users/raghuram.b/Desktop/temp
+
+
+
+IMAGE DATA PREPARATION OF MAKING FIRST_PAGE to A4 size and later will be sent to docker
+============
+Train data (do for all 9 categories)
+============
+DISO DLAY  DPID  DSHP	OTHERS	RCRI  RTQM  RZZZ  XXER     	
+
+files=`cat /Users/raghuram.b/Desktop/train_filelist.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i DISO`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/train/DISO/
+fi
+done
+done
+
+
+=========
+validation data (do for all 9 categories)
+=========
+DISO DLAY  DPID  DSHP	OTHERS	RCRI  RTQM  RZZZ  XXER  
+
+files=`cat /Users/raghuram.b/Desktop/validation_list.txt`
+for i in $files
+do
+category=`ls /Users/raghuram.b/Desktop/A4_SINGLEPAGE|grep -i DISO`
+for c in $category
+do 
+if [ $i = $c ]
+then
+     cp /Users/raghuram.b/Desktop/A4_SINGLEPAGE/$c /Users/raghuram.b/Desktop/data/validation/DISO/
+fi
+done
+done
+
+
+	
+
+

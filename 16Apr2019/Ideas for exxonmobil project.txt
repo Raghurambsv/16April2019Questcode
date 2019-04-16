@@ -1,0 +1,110 @@
+Take punctuations ,lowercase and clean text and try ( for ALL/GROUP_FILES for 20%,33%,45%) SVM
+
+TF-IDF parameter check the accuracy
+
+Remove single characters in content for quest OCR only(check accruacy then)
+
+Try our own OCR and then remove single character(which we couldnt remove earlier coz of QUEST_OCR format)see accuracy
+
+svm play with kernel (any other hyper parameters)
+TF-IDF any other hyper parameters
+
+check accuracy
+
+try RNN
+
+use bag of words from genism for the domain specific words for Text classification for better accuracy
+
+
+* there is diff inside the categories of VDSHP ( like 510 and 810 are different images but inside 510/810 its all same)
+
+use bag of words....take unique words from metadata(As in create a Vocab ==>how to
+ classify words + textfile last 2 lines)...create that words as vocab...then run it across each document and send it model
+ and use word hashing to tell few words belong to one category of file
+
+combine text classification (for more text content) + image classification (for only diagrams stuff)
+
+group files of same category output and then split inside category 70/30 unlike now random whole 3590 files in SVM
+
+
+While giving Quest
+===================
+even in MODEL SCRIPT give lists in alphabetical order ((Coz list is by default in LABELENCODER ordered CAPTIAL LETTERS then SMALL LETTERS and starts from '0' the count)
+
+check all the VALIDATION SCRIPT IS number given for 'X' is correct by calculating the count of elements in the list
+df1['Originator Predicted']=df1['Originator'].apply(lambda x: Label_Org.inverse_transform(df1['Originator']))
+df1['Discipline Predicted']=df1['Discipline'].apply(lambda x: 'Others' if x > 7  else Label_Disc.inverse_transform(df1['Discipline']))
+df1['Doc_Type_and_SubType Predicted']=df1['Doc_Type_and_SubType'].apply(lambda x: 'Others' if x > 7  else Label_DTST.inverse_transform(df1['Doc_Type_and_SubType']))
+            
+pickle files of 3 models only  + labelencoder pickle files
+train the model to 99%
+send the 30% test files along too
+Give command line script (not spyder wala )
+
+
+
+
+
+
+
+
+
+
+Doing for Page1 and Page2 A4 only
+###################################
+PDF ==> first 2 pages + last 1 page  ==> 3 pages pdf  ==> convert into 3 pages text ==> A4 dimenstion(higher dimension later)==> 
+BETTER CROP ==> [From jpg]page1 header (dimension)
+                          page2 header (dimension)
+                          lastpage footer (dimension)
+===>convert the above 3 images to text
+==>than give it to TF-IDF
+AND NEXT ==> add 2 last lines for every text file ==>than give it to TF-IDF
+
+
+yet to do  Page1 and Page2 and LAST PAGE for A4 only
+#####################################################
+
+??????????????????????????????????????
+
+
+Problem
+#######
+PDF to OCR to Text ==> text captured is nice
+PDF to 3images(A4 size) to Text ==> text captured is missing out of data (Try out increasing the convert_from_path(fnam, 500)
+
+solution: PDF crop(3 pages) ==> Direct text is better (hoping)
+
+
+increase resolution of image and try
+PyPDF2 is best for PDF to Text ( but need to learn cropping for that)
+Later than again crop all the pages in a pdf and try
+Even better is try filtering the noise in pdf or font based extraction try it out
+
+
+
+pip install pdfCropMargins ==> It helps to crop smaller junk chars and some ghost script
+                                Can crop pages uniformly based on the nth smallest crop values, which helps with noisy images or documents where a few pages have unwanted markings in their margins.
+                                https://pypi.org/project/pdfCropMargins/ 
+                                
+pdfminer==> to select based on text gap...text font.. https://pdfminer-docs.readthedocs.io/pdfminer_index.html
+           -A (Figure text)Forces to perform layout analysis for all the text strings, including text contained in figures.
+           
+           dumppdf.py
+           ##########
+           $ dumppdf.py -a foo.pdf
+(dump all the headers and contents, except stream objects)
+
+$ dumppdf.py -T foo.pdf
+(dump the table of contents)
+
+$ dumppdf.py -r -i6 foo.pdf > pic.jpeg
+(extract a JPEG image)
+
+
+Extract PDF to Text only for 1,2 and last page and check accuracy
+###############################################################
+
+
+IRONPython (For cropping pdf)
+##########
+
